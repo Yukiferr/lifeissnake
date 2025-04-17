@@ -138,3 +138,55 @@
     </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>ex2.10_c</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="title">
+            <h1>Supermercado JS</h1>
+        </div>
+        <div class="inputs">
+            <div class="product">
+                <p>Produto: </p>
+                <input type="text" id="inProduct">
+            </div>
+            <div class="preco">
+                <p>Preço: </p>
+                <input type="text" id="inPreco">
+            </div>
+            <button id="btn-promotion" class="btn">Ver Promoção</button>
+
+            <h3 id="first-out"></h3>
+            <h3 id="second-out"></h3>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+const button = document.getElementById('btn-promotion');
+
+button.addEventListener('click', () => {
+  const produto = document.getElementById('inProduct').value;
+  const saida = document.getElementById('first-out');
+  
+  saida.innerHTML = `Nome do produto: ${produto}` ;
+  saida.innerHTML = `Nome do produto: ${produto}` ;
+  saida.innerHTML = `Nome do produto: ${produto}` ;
+})
