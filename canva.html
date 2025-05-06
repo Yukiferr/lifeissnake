@@ -1,0 +1,1110 @@
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celular Interativo - Gestão Rural</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .phone {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background-color: #000;
+            border-radius: 36px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 8px solid #111;
+        }
+        
+        .phone-screen {
+            position: relative;
+            background-color: #fff;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 28px;
+        }
+        
+        .notch {
+            position: absolute;
+            width: 150px;
+            height: 30px;
+            background-color: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 10;
+        }
+        
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .app-icon:hover {
+            transform: scale(1.05);
+        }
+        
+        .app-name {
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .app-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 5;
+            display: none;
+            overflow-y: auto;
+        }
+        
+        .home-button {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 5px;
+            background-color: #333;
+            border-radius: 3px;
+            z-index: 20;
+            cursor: pointer;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 15px;
+            background-color: transparent;
+            color: #333;
+            font-size: 12px;
+            font-weight: 500;
+            position: relative;
+            z-index: 6;
+            margin-top: 30px;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 15;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            background-color: #4CAF50;
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease-in-out;
+        }
+
+        .line-chart {
+            width: 100%;
+            height: 150px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .line-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tab-button {
+            padding: 8px 12px;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-3{height:0.75rem}.h-4{height:1rem}.w-2{width:0.5rem}.w-3{width:0.75rem}.w-4{width:1rem}.w-full{width:100%}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-4{gap:1rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-l-4{border-left-width:4px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-yellow-500{--tw-border-opacity:1;border-color:rgb(234 179 8 / var(--tw-border-opacity, 1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(74 222 128 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-pink-500{--tw-bg-opacity:1;background-color:rgb(236 72 153 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-400{--tw-gradient-from:#60a5fa var(--tw-gradient-from-position);--tw-gradient-to:rgb(96 165 250 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-600{--tw-gradient-from:#16a34a var(--tw-gradient-from-position);--tw-gradient-to:rgb(22 163 74 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-green-800{--tw-gradient-to:#166534 var(--tw-gradient-to-position)}.p-1{padding:0.25rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.pt-10{padding-top:2.5rem}.pt-16{padding-top:4rem}.pt-2{padding-top:0.5rem}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-yellow-700{--tw-text-opacity:1;color:rgb(161 98 7 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}</style></head>
+<body>
+    <div class="phone">
+        <div class="notch"></div>
+        <div class="phone-screen">
+            <div class="status-bar">
+                <span>12:30</span>
+                <div>
+                    <span class="mr-2">4G</span>
+                    <span>85%</span>
+                </div>
+            </div>
+            
+            <!-- Home Screen -->
+            <div id="home-screen" class="p-4 pt-10" style="display: block;">
+                <div class="bg-gradient-to-r from-green-600 to-green-800 rounded-xl p-4 mb-6 text-white">
+                    <h2 class="text-xl font-bold">Olá, Agricultor!</h2>
+                    <p class="text-sm opacity-90">Bem-vindo ao seu assistente de gestão rural</p>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-4 mt-8">
+                    <div class="flex flex-col items-center" onclick="openApp('clima')">
+                        <div class="app-icon bg-blue-500">
+                            <span>☁️</span>
+                        </div>
+                        <div class="app-name">Clima</div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center" onclick="openApp('plantio')">
+                        <div class="app-icon bg-green-600">
+                            <span>🌱</span>
+                        </div>
+                        <div class="app-name">Plantio</div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center" onclick="openApp('custos')">
+                        <div class="app-icon bg-red-600">
+                            <span>💰</span>
+                        </div>
+                        <div class="app-name">Custos</div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center" onclick="openApp('financeiro')">
+                        <div class="app-icon bg-emerald-600">
+                            <span>📊</span>
+                        </div>
+                        <div class="app-name">Financeiro</div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center" onclick="openApp('maquinas')">
+                        <div class="app-icon bg-amber-600">
+                            <span>🚜</span>
+                        </div>
+                        <div class="app-name">Máquinas</div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center" onclick="openApp('mercado')">
+                        <div class="app-icon bg-purple-600">
+                            <span>📈</span>
+                        </div>
+                        <div class="app-name">Mercado</div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gray-100 rounded-xl p-4">
+                    <h3 class="font-medium text-gray-700">Tarefas de hoje</h3>
+                    <div class="mt-2 space-y-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="mr-2 h-4 w-4 text-green-600">
+                            <span class="text-sm">Verificar irrigação - Setor 3</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" class="mr-2 h-4 w-4 text-green-600">
+                            <span class="text-sm">Atualizar planilha de custos</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" class="mr-2 h-4 w-4 text-green-600">
+                            <span class="text-sm">Manutenção do trator</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Clima App -->
+            <div id="clima-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-blue-800">Previsão do Tempo</h2>
+                    <div class="mt-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-xl p-5 text-white">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm opacity-90">Hoje</p>
+                                <p class="text-4xl font-bold">28°C</p>
+                                <p class="text-sm">Parcialmente nublado</p>
+                            </div>
+                            <div class="text-5xl">⛅</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Próximos dias</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
+                                <span>Amanhã</span>
+                                <div class="flex items-center">
+                                    <span class="mr-2">☀️</span>
+                                    <span>30°C</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
+                                <span>Quarta</span>
+                                <div class="flex items-center">
+                                    <span class="mr-2">🌧️</span>
+                                    <span>25°C</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
+                                <span>Quinta</span>
+                                <div class="flex items-center">
+                                    <span class="mr-2">🌧️</span>
+                                    <span>24°C</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Alertas</h3>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 p-3 rounded">
+                            <p class="text-yellow-700 text-sm">Possibilidade de chuvas fortes na quarta-feira. Verifique a drenagem dos campos.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Impacto na Produção</h3>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <p class="text-sm text-blue-800">As condições climáticas previstas são favoráveis para o desenvolvimento da soja nos próximos 5 dias.</p>
+                            <p class="text-sm text-blue-800 mt-2">Recomendação: Aproveite o período seco de amanhã para aplicação de defensivos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Plantio App -->
+            <div id="plantio-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-green-800">Gestão de Plantio</h2>
+                    
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium text-gray-700">Culturas Ativas</h3>
+                            <button class="bg-green-600 text-white text-xs py-1 px-2 rounded">+ Adicionar</button>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-medium">Milho</h4>
+                                        <p class="text-xs text-gray-500">Plantado: 15/03/2023</p>
+                                    </div>
+                                    <div class="text-2xl">🌽</div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs mt-1">
+                                        <span>Crescimento: 65%</span>
+                                        <span>Colheita: 30 dias</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-medium">Soja</h4>
+                                        <p class="text-xs text-gray-500">Plantado: 10/04/2023</p>
+                                    </div>
+                                    <div class="text-2xl">🌱</div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs mt-1">
+                                        <span>Crescimento: 40%</span>
+                                        <span>Colheita: 60 dias</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Histórico de Produção</h3>
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-medium">Produtividade (sacas/ha)</h4>
+                                <select class="text-xs border rounded p-1">
+                                    <option>Últimos 3 anos</option>
+                                    <option>Últimos 5 anos</option>
+                                </select>
+                            </div>
+                            <div class="line-chart">
+                                <svg viewBox="0 0 300 100">
+                                    <polyline fill="none" stroke="#4ade80" stroke-width="2" points="
+                                        0,80
+                                        50,70
+                                        100,75
+                                        150,50
+                                        200,40
+                                        250,30
+                                        300,20
+                                        "></polyline>
+                                    <polyline fill="none" stroke="#f59e0b" stroke-width="2" points="
+                                        0,60
+                                        50,65
+                                        100,55
+                                        150,45
+                                        200,50
+                                        250,35
+                                        300,25
+                                        "></polyline>
+                                </svg>
+                                <div class="flex justify-around mt-2 text-xs text-gray-600">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-1"></div>
+                                        <span>Soja</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-amber-500 rounded-full mr-1"></div>
+                                        <span>Milho</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Tarefas de Plantio</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                                <input type="checkbox" class="mr-3 h-4 w-4 text-green-600">
+                                <div>
+                                    <p class="text-sm font-medium">Aplicar fertilizante</p>
+                                    <p class="text-xs text-gray-500">Setor 2 - Milho</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                                <input type="checkbox" class="mr-3 h-4 w-4 text-green-600">
+                                <div>
+                                    <p class="text-sm font-medium">Verificar irrigação</p>
+                                    <p class="text-xs text-gray-500">Setor 1 - Soja</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custos App -->
+            <div id="custos-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-red-800">Gestão de Custos</h2>
+                    
+                    <div class="mt-6 bg-red-50 rounded-xl p-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-medium text-red-800">Custo Total da Propriedade</h3>
+                            <select class="text-xs border rounded p-1">
+                                <option>Maio 2023</option>
+                                <option>Abril 2023</option>
+                            </select>
+                        </div>
+                        <p class="text-3xl font-bold mt-2">R$ 125.450,00</p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Distribuição de Custos</h3>
+                        <div class="chart-container" id="cost-chart">
+                            <div class="chart-bar bg-red-500" style="left: 20px; width: 30px; height: 120px;" data-height="120" data-label="Insumos"></div>
+                            <div class="chart-bar bg-blue-500" style="left: 60px; width: 30px; height: 80px;" data-height="80" data-label="Admin"></div>
+                            <div class="chart-bar bg-green-500" style="left: 100px; width: 30px; height: 100px;" data-height="100" data-label="Operações"></div>
+                            <div class="chart-bar bg-yellow-500" style="left: 140px; width: 30px; height: 70px;" data-height="70" data-label="Ativos"></div>
+                            <div class="chart-bar bg-purple-500" style="left: 180px; width: 30px; height: 90px;" data-height="90" data-label="Mão de obra"></div>
+                            <div class="chart-bar bg-pink-500" style="left: 220px; width: 30px; height: 40px;" data-height="40" data-label="Pessoal"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-600 mt-2 px-2">
+                            <span>Insumos</span>
+                            <span>Admin</span>
+                            <span>Operações</span>
+                            <span>Ativos</span>
+                            <span>M.O.</span>
+                            <span>Pessoal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <div class="flex space-x-2 mb-4 overflow-x-auto">
+                            <div class="tab-button active" onclick="switchTab('custos-tab', 'insumos')">Insumos</div>
+                            <div class="tab-button" onclick="switchTab('custos-tab', 'admin')">Admin</div>
+                            <div class="tab-button" onclick="switchTab('custos-tab', 'operacoes')">Operações</div>
+                            <div class="tab-button" onclick="switchTab('custos-tab', 'ativos')">Ativos</div>
+                            <div class="tab-button" onclick="switchTab('custos-tab', 'mao-obra')">Mão de Obra</div>
+                        </div>
+                        
+                        <div id="insumos" class="tab-content active">
+                            <h3 class="font-medium text-gray-700 mb-3">Custos com Insumos</h3>
+                            <div class="space-y-3">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Fertilizantes</h4>
+                                            <p class="text-xs text-gray-500">Última compra: 10/05/2023</p>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 45.200,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Defensivos</h4>
+                                            <p class="text-xs text-gray-500">Última compra: 05/05/2023</p>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 32.800,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Sementes</h4>
+                                            <p class="text-xs text-gray-500">Última compra: 20/04/2023</p>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 28.500,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="admin" class="tab-content">
+                            <h3 class="font-medium text-gray-700 mb-3">Custos Administrativos</h3>
+                            <div class="space-y-3">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Contabilidade</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 3.500,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Impostos</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 12.800,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Seguros</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 8.200,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="operacoes" class="tab-content">
+                            <h3 class="font-medium text-gray-700 mb-3">Custos com Operações</h3>
+                            <div class="space-y-3">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Combustível</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 18.500,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Energia Elétrica</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 7.800,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Manutenção</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 12.200,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="ativos" class="tab-content">
+                            <h3 class="font-medium text-gray-700 mb-3">Custos com Ativos</h3>
+                            <div class="space-y-3">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Depreciação de Máquinas</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 15.200,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Manutenção de Infraestrutura</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 8.500,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Financiamento de Equipamentos</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 22.800,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="mao-obra" class="tab-content">
+                            <h3 class="font-medium text-gray-700 mb-3">Custos com Mão de Obra</h3>
+                            <div class="space-y-3">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Salários</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 32.500,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Encargos</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 18.200,00</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <h4 class="font-medium">Terceirizados</h4>
+                                        </div>
+                                        <span class="text-red-600 font-medium">R$ 15.800,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Financeiro App -->
+            <div id="financeiro-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-emerald-800">Gestão Financeira</h2>
+                    
+                    <div class="mt-6 bg-emerald-50 rounded-xl p-4">
+                        <h3 class="font-medium text-emerald-800">Rentabilidade da Propriedade</h3>
+                        <p class="text-3xl font-bold mt-2">R$ 245.320,00</p>
+                        <div class="flex mt-2">
+                            <span class="text-emerald-600 text-sm">↑ 12% em relação ao ano anterior</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium text-gray-700">Receitas vs Despesas</h3>
+                            <select class="text-xs border rounded p-1">
+                                <option>Anual</option>
+                                <option>Semestral</option>
+                                <option>Trimestral</option>
+                            </select>
+                        </div>
+                        
+                        <div class="chart-container" id="finance-chart">
+                            <div class="chart-bar bg-emerald-500" style="left: 60px; width: 40px; height: 150px;" data-height="150"></div>
+                            <div class="chart-bar bg-red-500" style="left: 120px; width: 40px; height: 100px;" data-height="100"></div>
+                            <div class="chart-bar bg-emerald-500" style="left: 180px; width: 40px; height: 180px;" data-height="180"></div>
+                        </div>
+                        <div class="flex justify-around mt-2 text-xs text-gray-600">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-emerald-500 rounded-full mr-1"></div>
+                                <span>Receitas</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                                <span>Despesas</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Histórico de Rentabilidade</h3>
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                            <div class="line-chart">
+                                <svg viewBox="0 0 300 100">
+                                    <polyline fill="none" stroke="#10b981" stroke-width="2" points="
+                                        0,70
+                                        50,65
+                                        100,60
+                                        150,50
+                                        200,45
+                                        250,30
+                                        300,20
+                                        "></polyline>
+                                </svg>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600 mt-2">
+                                <span>2018</span>
+                                <span>2019</span>
+                                <span>2020</span>
+                                <span>2021</span>
+                                <span>2022</span>
+                                <span>2023</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Histórico de Preços</h3>
+                        <div class="space-y-3">
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-medium">Soja (saca)</h4>
+                                    <span class="text-emerald-600 font-medium">R$ 168,50</span>
+                                </div>
+                                <div class="line-chart" style="height: 80px;">
+                                    <svg viewBox="0 0 300 50">
+                                        <polyline fill="none" stroke="#10b981" stroke-width="2" points="
+                                            0,30
+                                            50,25
+                                            100,35
+                                            150,20
+                                            200,15
+                                            250,25
+                                            300,10
+                                            "></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-medium">Milho (saca)</h4>
+                                    <span class="text-emerald-600 font-medium">R$ 72,30</span>
+                                </div>
+                                <div class="line-chart" style="height: 80px;">
+                                    <svg viewBox="0 0 300 50">
+                                        <polyline fill="none" stroke="#f59e0b" stroke-width="2" points="
+                                            0,20
+                                            50,25
+                                            100,15
+                                            150,30
+                                            200,25
+                                            250,20
+                                            300,15
+                                            "></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Máquinas App -->
+            <div id="maquinas-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-amber-800">Gestão de Máquinas</h2>
+                    
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium text-gray-700">Equipamentos</h3>
+                            <button class="bg-amber-600 text-white text-xs py-1 px-2 rounded">+ Adicionar</button>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-medium">Trator John Deere 6120</h4>
+                                        <p class="text-xs text-gray-500">Última manutenção: 10/05/2023</p>
+                                    </div>
+                                    <div class="text-2xl">🚜</div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="flex justify-between text-xs">
+                                        <span>Horas de uso: 1.250h</span>
+                                        <span class="text-green-600 font-medium">Operacional</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-medium">Colheitadeira New Holland</h4>
+                                        <p class="text-xs text-gray-500">Última manutenção: 25/04/2023</p>
+                                    </div>
+                                    <div class="text-2xl">🚜</div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="flex justify-between text-xs">
+                                        <span>Horas de uso: 890h</span>
+                                        <span class="text-yellow-600 font-medium">Manutenção Pendente</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h4 class="font-medium">Sistema de Irrigação</h4>
+                                        <p class="text-xs text-gray-500">Última manutenção: 05/05/2023</p>
+                                    </div>
+                                    <div class="text-2xl">💧</div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="flex justify-between text-xs">
+                                        <span>Área coberta: 15 hectares</span>
+                                        <span class="text-green-600 font-medium">Operacional</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Custos com Ativos</h3>
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-medium">Custos Mensais</h4>
+                                <select class="text-xs border rounded p-1">
+                                    <option>Maio 2023</option>
+                                    <option>Abril 2023</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Combustível</span>
+                                    <span class="text-red-600">R$ 18.500,00</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Manutenção</span>
+                                    <span class="text-red-600">R$ 12.200,00</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Depreciação</span>
+                                    <span class="text-red-600">R$ 15.200,00</span>
+                                </div>
+                                <div class="flex justify-between text-sm font-medium pt-2 border-t">
+                                    <span>Total</span>
+                                    <span class="text-red-600">R$ 45.900,00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Manutenções Programadas</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                                <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                                <div>
+                                    <p class="text-sm font-medium">Troca de óleo - Trator</p>
+                                    <p class="text-xs text-gray-500">Agendado: 28/05/2023</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-gray-50 p-3 rounded-lg">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                                <div>
+                                    <p class="text-sm font-medium">Revisão - Colheitadeira</p>
+                                    <p class="text-xs text-gray-500">Agendado: 05/06/2023</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mercado App -->
+            <div id="mercado-app" class="app-screen" style="display: none;">
+                <div class="back-button" onclick="closeApp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="p-4 pt-16">
+                    <h2 class="text-2xl font-bold text-purple-800">Mercado Agrícola</h2>
+                    
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium text-gray-700">Cotação de Commodities</h3>
+                            <span class="text-xs text-gray-500">Atualizado: 12:15</span>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <span class="text-xl mr-2">🌱</span>
+                                        <div>
+                                            <h4 class="font-medium">Soja</h4>
+                                            <p class="text-xs text-gray-500">CBOT</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">US$ 14,25/bushel</p>
+                                        <p class="text-xs text-green-600">+0,8%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <span class="text-xl mr-2">🌽</span>
+                                        <div>
+                                            <h4 class="font-medium">Milho</h4>
+                                            <p class="text-xs text-gray-500">CBOT</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">US$ 6,15/bushel</p>
+                                        <p class="text-xs text-red-600">-0,3%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <span class="text-xl mr-2">🌾</span>
+                                        <div>
+                                            <h4 class="font-medium">Trigo</h4>
+                                            <p class="text-xs text-gray-500">CBOT</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">US$ 7,45/bushel</p>
+                                        <p class="text-xs text-green-600">+1,2%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Cotação Cambial</h3>
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <span class="text-xl mr-2">💵</span>
+                                    <div>
+                                        <h4 class="font-medium">Dólar</h4>
+                                        <p class="text-xs text-gray-500">USD/BRL</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-medium">R$ 5,12</p>
+                                    <p class="text-xs text-red-600">-0,5%</p>
+                                </div>
+                            </div>
+                            <div class="line-chart" style="height: 80px;">
+                                <svg viewBox="0 0 300 50">
+                                    <polyline fill="none" stroke="#6366f1" stroke-width="2" points="
+                                        0,25
+                                        50,20
+                                        100,30
+                                        150,35
+                                        200,25
+                                        250,20
+                                        300,15
+                                        "></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Indicadores Bolsa de Chicago</h3>
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-medium">CBOT Agrícola</h4>
+                                <span class="text-xs text-green-600">+0,7%</span>
+                            </div>
+                            <div class="line-chart" style="height: 100px;">
+                                <svg viewBox="0 0 300 80">
+                                    <polyline fill="none" stroke="#8b5cf6" stroke-width="2" points="
+                                        0,50
+                                        50,45
+                                        100,55
+                                        150,40
+                                        200,35
+                                        250,30
+                                        300,25
+                                        "></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="font-medium text-gray-700 mb-3">Notícias do Mercado</h3>
+                        <div class="space-y-3">
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <h4 class="font-medium text-sm">China aumenta importação de soja brasileira</h4>
+                                <p class="text-xs text-gray-500 mt-1">Há 2 horas</p>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <h4 class="font-medium text-sm">Clima adverso afeta produção de milho nos EUA</h4>
+                                <p class="text-xs text-gray-500 mt-1">Há 5 horas</p>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                <h4 class="font-medium text-sm">Previsão de safra recorde para 2023/2024</h4>
+                                <p class="text-xs text-gray-500 mt-1">Há 1 dia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="home-button" onclick="goHome()"></div>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar o aplicativo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animar os gráficos quando o app financeiro for aberto
+            animateCharts();
+        });
+        
+        // Função para abrir um aplicativo
+        function openApp(appName) {
+            // Esconder a tela inicial
+            document.getElementById('home-screen').style.display = 'none';
+            
+            // Mostrar o aplicativo selecionado
+            document.getElementById(appName + '-app').style.display = 'block';
+            
+            // Animar gráficos se for o app financeiro ou custos
+            if (appName === 'financeiro' || appName === 'custos') {
+                animateCharts();
+            }
+        }
+        
+        // Função para fechar um aplicativo e voltar para a tela inicial
+        function closeApp() {
+            // Esconder todos os aplicativos
+            const apps = document.querySelectorAll('.app-screen');
+            apps.forEach(app => {
+                app.style.display = 'none';
+            });
+            
+            // Mostrar a tela inicial
+            document.getElementById('home-screen').style.display = 'block';
+        }
+        
+        // Função para voltar para a tela inicial (botão home)
+        function goHome() {
+            closeApp();
+        }
+        
+        // Função para animar os gráficos
+        function animateCharts() {
+            setTimeout(() => {
+                const bars = document.querySelectorAll('.chart-bar');
+                bars.forEach(bar => {
+                    const height = bar.getAttribute('data-height');
+                    bar.style.height = height + 'px';
+                });
+            }, 300);
+        }
+        
+        // Função para alternar entre abas
+        function switchTab(tabGroup, tabId) {
+            // Desativar todas as abas do grupo
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Desativar todos os conteúdos de aba
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Ativar a aba selecionada
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ba9f60935eaed2',t:'MTc0NjU1NzAwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+</body></html>
